@@ -1,0 +1,1492 @@
+num,user request,query
+1,"Кто является автором публикации  ""Оптимизация динамических систем с импульсными управлениями и ударными воздействиями""?","SELECT ?author WHERE { 
+  ?publ a :Публикация;
+            :название ?publ_name;
+            :имеетАвтора ?author .
+  FILTER(lcase(str(?publ_name)) =  ""Оптимизация динамических систем с импульсными управлениями и ударными воздействиями"") 
+ }"
+11,"В каких организациях работал  ""Ярмольчук Г Г""?","SELECT DISTINCT ?org WHERE {  
+  ?action a :Действие ; :имеетАктора ?author ; :исполняетсяВОрганизации ?org . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Ярмольчук Г Г"") }"
+21,"С какими организациями был аффилирован  ""Крафт Юрий Алексеевич"" в промежутке с  2000 года по  2012 год?","SELECT ?org WHERE { 
+  ?action a :Действие ; 
+             :имеетАктора ?author ;
+             :исполняетсяВОрганизации ?org ; 
+             :годНачала ?start ; :годЗавершения ?end .
+  ?author :фамилия ?last_name . 
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Крафт Юрий Алексеевич"")
+  FILTER(?start >=  2000 && ?end <=  2012) }"
+31,"Кто был соавтором  ""Казаков Василий Анатольевич""?","SELECT DISTINCT ?coauthor WHERE { 
+  ?pub a :Публикация ; 
+    :имеетАвтора ?author ; 
+    :имеетАвтора ?coauthor . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Казаков Василий Анатольевич"")
+  ?coauthor :фамилия ?colast_name.
+            OPTIONAL {?coauthor :имя ?cofirst_name. }
+            OPTIONAL {?coauthor :отчество ?cosec_name. }
+  BIND(CONCAT( ?colast_name, "" "", COALESCE(?cofirst_name,""""), "" "", COALESCE(?cosec_name,"""") ) as ?coauthor_fio_sep).
+  FILTER(lcase(str(?coauthor_fio_sep)) != lcase(str(?author_fio_sep))) }"
+41,"Кто был соавтором  ""Савицкий Олег Анатольевич"" по тематике  ""Военное дело""?","SELECT DISTINCT ?coauthor WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author; :имеетАвтора ?coauthor ; 
+    :классифицируется ?f1 .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Савицкий Олег Анатольевич"")
+  ?coauthor :фамилия ?colast_name.
+            OPTIONAL {?coauthor :имя ?cofirst_name. }
+            OPTIONAL {?coauthor :отчество ?cosec_name. }
+  BIND(CONCAT( ?colast_name, "" "", COALESCE(?cofirst_name,""""), "" "", COALESCE(?cosec_name,"""") ) as ?coauthor_fio_sep).
+  FILTER(lcase(str(?coauthor_fio_sep)) != lcase(str(?author_fio_sep))) 
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Военное дело"")
+}"
+51,"Кто был соавтором  ""Копнина Наталья Валерьяновна"" в промежутке с  2009 года по  2023 год?","SELECT DISTINCT ?coauthor WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author; :имеетАвтора ?coauthor ; :годИздания ?year .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Копнина Наталья Валерьяновна"")
+  ?coauthor :фамилия ?colast_name.
+            OPTIONAL {?coauthor :имя ?cofirst_name. }
+            OPTIONAL {?coauthor :отчество ?cosec_name. }
+  BIND(CONCAT( ?colast_name, "" "", COALESCE(?cofirst_name,""""), "" "", COALESCE(?cosec_name,"""") ) as ?coauthor_fio_sep).
+  FILTER(lcase(str(?coauthor_fio_sep)) != lcase(str(?author_fio_sep)) && ?year >=  2009 && ?year <=  2023) }"
+61,"Кто был соавтором  ""Мартиросов А В"" по тематике  ""Грибоводство"" в промежутке с  2007 года по  2013 год?","SELECT DISTINCT ?coauthor WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author; :имеетАвтора ?coauthor ; :классифицируется ?f1 .
+  ?pub :годИздания ?year . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Мартиросов А В"")
+  ?coauthor :фамилия ?colast_name.
+            OPTIONAL {?coauthor :имя ?cofirst_name. }
+            OPTIONAL {?coauthor :отчество ?cosec_name. }
+  BIND(CONCAT( ?colast_name, "" "", COALESCE(?cofirst_name,""""), "" "", COALESCE(?cosec_name,"""") ) as ?coauthor_fio_sep).
+  FILTER(lcase(str(?coauthor_fio_sep)) != lcase(str(?author_fio_sep)) && ?year >=  2007 && ?year <=  2013) 
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Грибоводство"")
+}"
+71,"С представителями каких организаций  ""Филатов Владимир Иванович"" писал совместные статьи?","SELECT DISTINCT ?org WHERE { 
+  ?pub rdf:type :Статья . 
+  ?pub :имеетАвтора ?author, ?coauthor .
+  ?author :фамилия ?last_name .
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Филатов Владимир Иванович"")
+
+  ?act rdf:type :Действие . 
+  ?act :порождает ?pub .
+  ?act :имеетАктора ?coauthor . 
+
+  ?coauthor :фамилия ?colast_name .
+            OPTIONAL {?coauthor :имя ?cofirst_name. }
+            OPTIONAL {?coauthor :отчество ?cosec_name. }
+  BIND(CONCAT( ?colast_name, "" "", COALESCE(?cofirst_name,""""), "" "", COALESCE(?cosec_name,"""") ) as ?coauthor_fio_sep).
+  FILTER(lcase(str(?coauthor_fio_sep)) != lcase(str(?author_fio_sep)) )
+  ?act :исполняетсяВОрганизации ?org }"
+81,"С представителями каких организаций  ""Овечкин Юрий Владимирович"" писал совместные статьи с  2001 года по  2022 год?","SELECT DISTINCT ?org WHERE { 
+  ?pub rdf:type :Статья . 
+  ?pub :имеетАвтора ?author, ?coauthor . 
+  ?pub :годИздания ?year . 
+  ?author :фамилия ?last_name .
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Овечкин Юрий Владимирович"")
+  ?coauthor :фамилия ?colast_name.
+            OPTIONAL {?coauthor :имя ?cofirst_name. }
+            OPTIONAL {?coauthor :отчество ?cosec_name. }
+  BIND(CONCAT( ?colast_name, "" "", COALESCE(?cofirst_name,""""), "" "", COALESCE(?cosec_name,"""") ) as ?coauthor_fio_sep).
+  FILTER(lcase(str(?coauthor_fio_sep)) != lcase(str(?author_fio_sep)) && ?year >=  2001 && ?year <=  2022)
+
+  ?act rdf:type :Действие . 
+  ?act :порождает ?pub .
+  ?act :имеетАктора ?coauthor . 
+  ?act :исполняетсяВОрганизации ?org }"
+91,"Когда  ""Свихнушина Екатерина Андреевна"" работала над тематикой  ""Теория кодирования""?","SELECT ?start ?end WHERE { 
+  ?action a :Действие ; :имеетАктора ?author .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Свихнушина Екатерина Андреевна"").
+  ?action :датаНачала ?start ; 
+    :датаЗавершения ?end ; 
+    :порождает ?res . 
+  ?res :классифицируется ?f1 . 
+
+  ?f1 a ?mf1 . 
+  ?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+    :rank ?r1 . 
+  ?f1 :название ?fname1 .  
+
+  FILTER(?r1 < 999)
+  FILTER(lcase(str(?fname1)) =  ""Теория кодирования"")
+}"
+101,"Когда  ""Сорокин Иван В."" работал над использованием  ""Передача и обработка сигналов"" в  ""Теория дифференциальных игр""?","SELECT ?start ?end 
+WHERE {
+  ?action a :Действие ;
+          :имеетАктора ?author ;
+          :датаНачала ?start ;
+          :датаЗавершения ?end ;
+          :порождает ?res .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Сорокин Иван В."").
+
+?res :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Передача и обработка сигналов"")
+FILTER(lcase(str(?fname2)) =  ""Теория дифференциальных игр"")
+}"
+111,"Есть ли совместные публикации у  ""Гольдин Дмитрий Алексеевич"" и  ""Верхозина И О""?","SELECT ?pub WHERE { 
+  ?pub a :Публикация ;
+    :имеетАвтора author ; 
+    :имеетАвтора author2 . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Гольдин Дмитрий Алексеевич"").
+  ?author2 :фамилия ?last_name2.
+            OPTIONAL {?author2 :имя ?first_name2. }
+            OPTIONAL {?author2 :отчество ?sec_name2. }
+  BIND(CONCAT( ?last_name2, "" "", COALESCE(?first_name2,""""), "" "", COALESCE(?sec_name2,"""") ) as ?author_fio_sep2) 
+  FILTER(lcase(str(?author_fio_sep2)) =  ""Верхозина И О"")}"
+121,"Какие есть общие тематики исследований у авторов  ""Кравченко Александр Михайлович"" и  ""Лернер М. И.""?","SELECT ?factor WHERE { 
+  ?p1 :имеетАвтора author ; :классифицируется ?factor . 
+  ?p2 :имеетАвтора author2 ; :классифицируется ?factor . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Кравченко Александр Михайлович"").
+  ?author2 :фамилия ?last_name2.
+            OPTIONAL {?author2 :имя ?first_name2. }
+            OPTIONAL {?author2 :отчество ?sec_name2. }
+  BIND(CONCAT( ?last_name2, "" "", COALESCE(?first_name2,""""), "" "", COALESCE(?sec_name2,"""") ) as ?author_fio_sep2) 
+  FILTER(lcase(str(?author_fio_sep2)) =  ""Лернер М. И."")}"
+131,"Какие у  ""Башалханов И А"" и  ""Минаев Эдуард Сергеевич"" общие соавторы?","SELECT ?coauthor WHERE { 
+  ?pub1 :имеетАвтора ?author , ?coauthor . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Башалханов И А"").
+  ?coauthor :фамилия ?colast_name.
+            OPTIONAL {?coauthor :имя ?cofirst_name. }
+            OPTIONAL {?coauthor :отчество ?cosec_name. }
+  BIND(CONCAT( ?colast_name, "" "", COALESCE(?cofirst_name,""""), "" "", COALESCE(?cosec_name,"""") ) as ?coauthor_fio_sep).
+  FILTER(lcase(str(?coauthor_fio_sep)) != lcase(str(?author_fio_sep)))
+
+  FILTER(?coauthor != ?author) 
+
+  ?pub2 :имеетАвтора ?author2 , ?coauthor . 
+  ?author2 :фамилия ?last_name2.
+            OPTIONAL {?author2 :имя ?first_name2. }
+            OPTIONAL {?author2 :отчество ?sec_name2. }
+  BIND(CONCAT( ?last_name2, "" "", COALESCE(?first_name2,""""), "" "", COALESCE(?sec_name2,"""") ) as ?author_fio_sep2) 
+  FILTER(lcase(str(?author_fio_sep2)) =  ""Минаев Эдуард Сергеевич"")
+
+  FILTER(?coauthor != ?author2) }"
+141,"Какие у  ""Плотникова В Н"" и  ""Каиркенов Х. К."" общие аффилиации?","SELECT DISTINCT ?org WHERE { ?act1 a :Действие ; :имеетАктора ?author ; :исполняетсяВОрганизации ?org . 
+?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+FILTER(lcase(str(?author_fio_sep)) =  ""Плотникова В Н"").
+
+?act2 a :Действие ; :имеетАктора ?author2 ; :исполняетсяВОрганизации ?org .
+?author2 :фамилия ?last_name2.
+            OPTIONAL {?author2 :имя ?first_name2. }
+            OPTIONAL {?author2 :отчество ?sec_name2. }
+BIND(CONCAT( ?last_name2, "" "", COALESCE(?first_name2,""""), "" "", COALESCE(?sec_name2,"""") ) as ?author_fio_sep2) 
+FILTER(lcase(str(?author_fio_sep2)) =  ""Каиркенов Х. К."") }"
+151,"Для данного автора  ""Королев В С"" покажи его публикации за время с  2003 по  2015 годы.","SELECT ?pub ?year WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author ; :годИздания ?year . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Королев В С"").
+  FILTER(?year >=  2003 && ?year <=  2015) }"
+161,"Выведи все статьи  ""Насатуева Соелма Номтоевна"" в период  2008– 2017.","SELECT ?pub ?year WHERE { 
+  ?pub a :Статья ; :имеетАвтора ?author ; :годИздания ?year .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Насатуева Соелма Номтоевна"").
+  FILTER(?year >=  2008 && ?year <=  2017) }"
+171,"Для данного автора  ""Rahul Reddy Nadikattu"" покажи все его публикации.","SELECT ?pub WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Rahul Reddy Nadikattu"") }"
+181,"Для данного автора  ""Парыгин Данила Сергеевич"" покажи все ключевые слова, которые он использовал в своих публикациях.","SELECT DISTINCT ?keyword WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author ; :ключевоеСлово ?keyword .
+  ?author :фамилия ?last_name .
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Парыгин Данила Сергеевич"") }"
+191,"Для данного автора  ""Купцов Петр Дмитриевич"" покажи все ключевые слова, которые он использовал в публикациях в организации  ""ФГБУ Арктический и антарктический научно-исследовательский институт"".","SELECT DISTINCT ?keyword WHERE { 
+  ?action a :Действие ; :имеетАктора ?author ; :исполняетсяВОрганизации ?org; :порождает ?pub . 
+  ?pub a :Публикация ; :ключевоеСлово ?keyword . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Купцов Петр Дмитриевич"") 
+
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""ФГБУ Арктический и антарктический научно-исследовательский институт"") }"
+201,"Для данного автора  ""Сейфи Н Т"" покажи идентификаторы ORCID, elibrary, Scopus.","SELECT ?orcid ?elibrary ?scopus WHERE { 
+  ?author a :Персона .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Сейфи Н Т"") 
+  OPTIONAL { ?author :ORCID ?orcid } 
+  OPTIONAL { ?author :eLibraryId ?elibrary } 
+  OPTIONAL { ?author :scopusId ?scopus } }"
+211,"Покажи названия всех публикаций  ""Усмонов Ботир Ш"", написанных без соавторов.","SELECT ?title WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author ; :название ?title . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Усмонов Ботир Ш"") 
+  FILTER NOT EXISTS { ?pub :имеетАвтора ?other . FILTER(?other != ?author) } }"
+221,"Сколько публикаций у автора  ""Прокопенков Александр Александрович""?","SELECT (COUNT(DISTINCT ?pub) AS ?count) WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Прокопенков Александр Александрович"")  }"
+231,"Число статей у  ""Савченко Юрий Васильевич""?","SELECT (COUNT(DISTINCT ?pub) AS ?count) WHERE { 
+  ?pub a :Статья ; :имеетАвтора ?author .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Савченко Юрий Васильевич"") }"
+241,"Сколько публикаций у автора  ""Крылов Павел Андреевич"" в соавторстве?","SELECT (COUNT(DISTINCT ?pub) AS ?count) WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author ; :имеетАвтора ?coauthor .
+  ?author :фамилия ?last_name .
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Крылов Павел Андреевич"")
+  FILTER(?coauthor != ?author) }"
+251,"Выведи названия публикаций автора  ""Кадэй Тхэй -"", написанных в соавторстве.","SELECT DISTINCT ?title WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author ; :имеетАвтора ?coauthor ; :название ?title . 
+  ?author :фамилия ?last_name .
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Кадэй Тхэй -"")
+  FILTER(?coauthor != ?author) }"
+261,"Покажи названия публикаций автора  ""Бородин А Д"" за время с  2003 по  2015 годы.","SELECT ?title WHERE { 
+  ?pub a :Публикация ; :имеетАвтора ?author ; :годИздания ?year ; :название ?title . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Бородин А Д"")
+  FILTER(?year >=  2003 && ?year <=  2015) }"
+271,"Связаны ли  ""Гохберг Л М"" и  ""Шибаев Максим Станиславович"" отношением прямого или косвенного соавторства?","ASK WHERE { 
+  ?author (^:имеетАвтора/:имеетАвтора)+ ?author2 .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Гохберг Л М"")
+  ?author2 :фамилия ?last_name2.
+            OPTIONAL {?author2 :имя ?first_name2. }
+            OPTIONAL {?author2 :отчество ?sec_name2. }
+  BIND(CONCAT( ?last_name2, "" "", COALESCE(?first_name2,""""), "" "", COALESCE(?sec_name2,"""") ) as ?author_fio_sep2) 
+  FILTER(lcase(str(?author_fio_sep2)) =  ""Шибаев Максим Станиславович"") }"
+281,Кто является автором публикации :publ_7808?,SELECT ?author WHERE { :publ_7808 :имеетАвтора ?author . }
+291,В каких организациях работал :person_4111?,SELECT ?org WHERE { ?action a :Действие ; :имеетАктора :person_4111 ; :исполняетсяВОрганизации ?org . }
+301,С какими организациями был аффилирован :person_5038 в промежутке с  2008 года по  2018 год?,SELECT ?org WHERE { ?action a :Действие ; :имеетАктора :person_5038 ; :исполняетсяВОрганизации ?org ; :годНачала ?start ; :годЗавершения ?end . FILTER(?start >=  2008 && ?end <=  2018) }
+311,Кто был соавтором :person_7275?,SELECT DISTINCT ?coauthor WHERE { ?pub a :Публикация ; :имеетАвтора :person_7275 ; :имеетАвтора ?coauthor . FILTER(?coauthor != :person_7275) }
+321,Кто был соавтором :person_7842 по тематике :class_factor_3560?,SELECT DISTINCT ?coauthor WHERE { ?pub a :Публикация ; :имеетАвтора :person_7842 ; :имеетАвтора ?coauthor ; :классифицируется :class_factor_3560 . FILTER(?coauthor != :person_7842) }
+331,Кто был соавтором :person_577 в промежутке с  2010 года по  2012 год?,SELECT DISTINCT ?coauthor WHERE { ?pub a :Публикация ; :имеетАвтора :person_577 ; :имеетАвтора ?coauthor ; :годИздания ?year . FILTER(?coauthor != :person_577 && ?year >=  2010 && ?year <=  2012) }
+341,Кто был соавтором :person_2129 по тематике :class_factor_3087 в промежутке с  2010 года по  2018 год?,SELECT DISTINCT ?coauthor WHERE { ?pub a :Публикация ; :имеетАвтора :person_2129 ; :имеетАвтора ?coauthor ; :классифицируется :class_factor_3087 ; :годИздания ?year . FILTER(?coauthor != :person_2129 && ?year >=  2010 && ?year <=  2018) }
+351,С представителями каких организаций :person_2524 писал совместные статьи?,"SELECT DISTINCT ?org WHERE { 
+ ?pub rdf:type :Статья . 
+ ?pub :имеетАвтора :person_2524 , ?coauthor . 
+ FILTER(?coauthor != :person_2524) 
+ ?act rdf:type :Действие . 
+ ?act :порождает ?pub .
+ ?act :имеетАктора ?coauthor . 
+ ?act :исполняетсяВОрганизации ?org }"
+361,С представителями каких организаций :person_3107 писал совместные статьи с  2009 года по  2014 год?,"SELECT DISTINCT ?org WHERE { 
+ ?pub rdf:type :Статья .  
+ ?pub :имеетАвтора :person_3107 , ?coauthor . 
+ ?pub :годИздания ?year . 
+ FILTER(?coauthor != :person_3107 && ?year >=  2009 && ?year <=  2014)
+ ?act rdf:type :Действие . 
+ ?act :порождает ?pub .
+ ?act :имеетАктора ?coauthor . 
+ ?act :исполняетсяВОрганизации ?org }"
+371,Когда :person_2469 работал над тематикой :class_factor_51?,SELECT ?start ?end WHERE { ?action a :Действие ; :имеетАктора :person_2469 ; :датаНачала ?start ; :датаЗавершения ?end ; :порождает ?res . ?res :классифицируется :class_factor_51 . }
+381,Когда :person_764 работал над использованием :class_factor_8613 в :class_factor_6901?,"SELECT ?start ?end
+WHERE {
+  ?action a :Действие ;
+          :имеетАктора :person_764 ;
+          :датаНачала ?start ;
+          :датаЗавершения ?end ;
+          :порождает ?res .
+  ?res :классифицируется :class_factor_8613 ,:class_factor_6901 .
+ :class_factor_8613 a ?metaFactor1 . ?metaFactor1 rdfs:subClassOf :ФакторКлассификации .
+ :class_factor_6901 a ?metaFactor2 . ?metaFactor2 rdfs:subClassOf :ФакторКлассификации .
+  ?metaFactor1 :rank ?rank1 .
+  ?metaFactor2 :rank ?rank2 .
+  FILTER(?rank1 < ?rank2)
+  FILTER(?rank1 < 999 && ?rank2 < 999)
+}"
+391,Есть ли совместные публикации у :person_9588 и :person_1112?,SELECT ?pub WHERE { ?pub a :Публикация ; :имеетАвтора :person_9588 ; :имеетАвтора :person_1112 . }
+401,Какие есть общие тематики исследований у авторов :person_8542 и :person_7785?,"SELECT ?factor WHERE { 
+  ?p1 :имеетАвтора :person_8542 ; :классифицируется ?factor . 
+  ?p2 :имеетАвтора :person_7785 ; :классифицируется ?factor . }"
+411,Какие у :person_4107 и :person_9324 общие соавторы?,"SELECT ?coauthor WHERE { 
+ ?pub1 :имеетАвтора :person_4107 , ?coauthor . 
+ FILTER(?coauthor != :person_4107) 
+ ?pub2 :имеетАвтора :person_9324 , ?coauthor . 
+ FILTER(?coauthor != :person_9324) }"
+421,Какие у :person_3521 и :person_6147 общие аффилиации?,SELECT DISTINCT ?org WHERE { ?act1 a :Действие ; :имеетАктора :person_3521 ; :исполняетсяВОрганизации ?org . ?act2 a :Действие ; :имеетАктора :person_6147 ; :исполняетсяВОрганизации ?org . }
+431,Для данного автора :person_8879 покажи его публикации за время с  2011 по  2014 годы.,SELECT ?pub ?year WHERE { ?pub a :Публикация ; :имеетАвтора :person_8879 ; :годИздания ?year . FILTER(?year >=  2011 && ?year <=  2014) }
+441,Выведи все статьи :person_5959 в период  2007– 2012.,SELECT ?pub ?year WHERE { ?pub a :Статья ; :имеетАвтора :person_5959 ; :годИздания ?year . FILTER(?year >=  2007 && ?year <=  2012) }
+451,Для данного автора :person_7689 покажи все его публикации.,SELECT ?pub WHERE { ?pub a :Публикация ; :имеетАвтора :person_7689 . }
+461,"Для данного автора :person_464 покажи все ключевые слова, которые он использовал в своих публикациях.",SELECT DISTINCT ?keyword WHERE { ?pub a :Публикация ; :имеетАвтора :person_464 ; :ключевоеСлово ?keyword . }
+471,"Для данного автора :person_4830 покажи все ключевые слова, которые он использовал в публикациях в организации :nio_1698.",SELECT DISTINCT ?keyword WHERE { ?action a :Действие ; :имеетАктора :person_4830 ; :исполняетсяВОрганизации :nio_1698; :порождает ?pub . ?pub a :Публикация ; :ключевоеСлово ?keyword . }
+481,"Для данного автора :person_7301 покажи идентификаторы ORCID, elibrary, Scopus.","SELECT ?orcid ?elibrary ?scopus WHERE { 
+:person_7301 a :Персона .
+OPTIONAL { :person_7301 :ORCID ?orcid } OPTIONAL { :person_7301 :eLibraryId ?elibrary } OPTIONAL { :person_7301 :scopusId ?scopus } }"
+491,"Покажи названия всех публикаций :person_394, написанных без соавторов.",SELECT ?title WHERE { ?pub a :Публикация ; :имеетАвтора :person_394 ; :название ?title . FILTER NOT EXISTS { ?pub :имеетАвтора ?other . FILTER(?other != :person_394) } }
+501,Сколько публикаций у автора :person_3036?,SELECT (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?pub a :Публикация ; :имеетАвтора :person_3036 . }
+511,Число статей у :person_2041?,SELECT (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?pub a :Статья ; :имеетАвтора :person_2041 . }
+521,Сколько публикаций у автора :person_5093 в соавторстве?,SELECT (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?pub a :Публикация ; :имеетАвтора :person_5093 ; :имеетАвтора ?coauthor . FILTER(?coauthor != :person_5093) }
+531,"Выведи названия публикаций автора :person_7386, написанных в соавторстве.",SELECT DISTINCT ?title WHERE { ?pub a :Публикация ; :имеетАвтора :person_7386 ; :имеетАвтора ?coauthor ; :название ?title . FILTER(?coauthor != :person_7386) }
+541,Покажи названия публикаций автора :person_4541 за время с  2003 по  2024 годы.,SELECT ?title WHERE { ?pub a :Публикация ; :имеетАвтора :person_4541 ; :годИздания ?year ; :название ?title . FILTER(?year >=  2003 && ?year <=  2024) }
+551,Связаны ли :person_2626 и :person_6158 отношением прямого или косвенного соавторства?,ASK WHERE { :person_2626 (^:имеетАвтора/:имеетАвтора)+ :person_6158 }
+561,"По какой научной тематике публиковался  ""Болотин Б М""?","SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; 
+  :имеетАктора ?author ; 
+  :имеетРоль :автор ; 
+  :порождает ?pub . 
+  ?pub rdf:type :Публикация ; :классифицируется ?factor .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "",   COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Болотин Б М"")}"
+571,"Какая научная тематика разрабатывается в  ""Институт молекулярной и клеточной биологии СО РАН (ИМКБ СО РАН) ""?","SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора ?person ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""Институт молекулярной и клеточной биологии СО РАН (ИМКБ СО РАН) "") }"
+581,"Какие организации работают над тематикой  ""Интегральные уравнения""?","SELECT DISTINCT ?org WHERE { 
+?action rdf:type :Действие ; 
+  :имеетАктора ?actor ; 
+  :имеетРоль :автор ; 
+  :исполняетсяВОрганизации ?org ; 
+  :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . ?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Интегральные уравнения"")
+}"
+591,"Какие организации работали над тематикой  ""Широкополосные беспроводные сети"" в промежутке с  2011 года по  2016 год?","SELECT DISTINCT ?org WHERE { 
+?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 ;
+  :годИздания ?year . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . ?f1 :название ?fname1 .
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Широкополосные беспроводные сети"")
+FILTER(?year >=  2011 && ?year <=  2016) }"
+601,"Какие организации когда-либо работали над тематикой  ""АСУ ТП""?","SELECT DISTINCT ?org WHERE { 
+?action rdf:type :Действие ; 
+  :имеетАктора ?actor ; 
+  :имеетРоль :автор ; 
+  :исполняетсяВОрганизации ?org ; 
+  :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . ?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""АСУ ТП"")
+}"
+611,"Какие авторы публикуются по тематике  ""Механизмы стимулирования""?","SELECT DISTINCT ?author WHERE { 
+?action rdf:type :Действие ; 
+  :имеетАктора ?author ; 
+  :имеетРоль :автор ; 
+  :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . ?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Механизмы стимулирования"")
+}"
+621,"Какие публикации существуют по теме  ""Управление в экологических системах""?","SELECT DISTINCT ?pub WHERE {
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . ?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Управление в экологических системах"")
+}"
+631,"Укажи статьи автора  ""Черешко Алексей Анатольевич"" по  ""Виды управления, синтез систем управления"" за период  2003– 2020","SELECT DISTINCT ?pub WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+?pub rdf:type :Статья ; 
+  :годИздания ?year ;
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . ?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Виды управления, синтез систем управления"")
+
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Черешко Алексей Анатольевич"")
+
+  FILTER(?year >=  2003 && ?year <=  2020) }"
+641,"Какие работы по тематике  ""Дифференциальная алгебра"" были написаны в  ""Институт химии твердого тела и механохимии СО РАН (ИХТТМ СО РАН) "" в промежутке с  2011 года по  2015 год?","SELECT DISTINCT ?pub WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""Институт химии твердого тела и механохимии СО РАН (ИХТТМ СО РАН) "")
+
+?pub rdf:type :Публикация ; 
+  :годИздания ?year ;
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . ?f1 :название ?fname1 .  
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Дифференциальная алгебра"")
+
+FILTER(?year >=  2011 && ?year <=  2015) }"
+651,"Какие есть публикации по теме  ""Механизмы обеспечения взаимодействия объектов сложных систем в жестком реальном времени"" в приложении к сфере  ""Финансы""?","SELECT DISTINCT ?pub WHERE {
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Механизмы обеспечения взаимодействия объектов сложных систем в жестком реальном времени"")
+FILTER(lcase(str(?fname2)) =  ""Финансы"")
+}"
+661,"Какие авторы пишут по теме  ""Алгебраическая геометрия"" в приложении к области  ""Решетки и Булевы алгебры""?","SELECT DISTINCT ?author WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Алгебраическая геометрия"")
+FILTER(lcase(str(?fname2)) =  ""Решетки и Булевы алгебры"")
+}"
+671,"В каких организациях работают над темой  ""Металлургия"" в приложении к области  ""Грибоводство""?","SELECT DISTINCT ?org WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Металлургия"")
+FILTER(lcase(str(?fname2)) =  ""Грибоводство"")
+}"
+681,"Какие есть публикации по использованию темы  ""Беспилотные летательные аппараты"" в  ""Управление в экологических системах""?","SELECT DISTINCT ?pub WHERE { 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Беспилотные летательные аппараты"")
+FILTER(lcase(str(?fname2)) =  ""Управление в экологических системах"")
+}"
+691,"Какие авторы пишут об использовании  ""Линейное программирование"" в  ""Криптография и математические методы защиты информации""?","SELECT DISTINCT ?author WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Линейное программирование"")
+FILTER(lcase(str(?fname2)) =  ""Криптография и математические методы защиты информации"")
+}"
+701,"В каких организациях работают над использованием  ""Решетки и Булевы алгебры"" в  ""Теория массового обслуживания""?","SELECT DISTINCT ?org WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Решетки и Булевы алгебры"")
+FILTER(lcase(str(?fname2)) =  ""Теория массового обслуживания"")
+}"
+711,"Когда в  ""ФГУП Центральный научно-исследовательский институт химии и механики"" работали над тематикой  ""Социальные сетевые структуры""?","SELECT DISTINCT ?year WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org  ; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""ФГУП Центральный научно-исследовательский институт химии и механики"")
+
+  ?pub rdf:type :Публикация ; 
+  :годИздания ?year ;
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Социальные сетевые структуры"") }"
+721,"Когда в  ""ФГУП Всероссийский научно-исследовательский институт метрологии им. Д.И. Менделеева"" работали над использованием  ""Кормопроизводство"" в  ""Электромехатроника""?","SELECT DISTINCT ?year WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""ФГУП Всероссийский научно-исследовательский институт метрологии им. Д.И. Менделеева"")
+
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1, ?f2 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+?f2 a ?mf2 . 
+?mf2 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r2 . 
+?f2 :название ?fname2 . 
+FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)
+FILTER(lcase(str(?fname1)) =  ""Кормопроизводство"")
+FILTER(lcase(str(?fname2)) =  ""Электромехатроника"")
+}"
+731,"Какая тематика была популярна в  ""Институт гидродинамики им. М.А. Лаврентьева СО РАН (ИГиЛ СО РАН) "" в  2005– 2018 годы?","SELECT ?factor (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :имеетАктора ?actor ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""Институт гидродинамики им. М.А. Лаврентьева СО РАН (ИГиЛ СО РАН) "")
+
+  ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . FILTER(?year >=  2005 && ?year <=  2018) } GROUP BY ?factor ORDER BY DESC(?count)"
+741,"Какой математический аппарат применяется в  ""Измерительные технические средства управления""?","SELECT DISTINCT ?factor WHERE { 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 . 
+?f1 rdf:type :МатематическийАппарат .
+?f1 :название ?fname1 .  
+
+FILTER(lcase(str(?fname1)) =  ""Измерительные технические средства управления"")
+}"
+751,"Какой математический аппарат применялся в  ""Коллективный выбор, голосование"" в  2002– 2017 годы?","SELECT DISTINCT ?factor WHERE { 
+?pub rdf:type :Публикация ; 
+  :годИздания ?year ; 
+  :классифицируется ?f1 . 
+?f1 rdf:type :МатематическийАппарат .
+?f1 :название ?fname1 .  
+
+FILTER(lcase(str(?fname1)) =  ""Коллективный выбор, голосование"")
+FILTER(?year >=  2002 && ?year <=  2017) }"
+761,"В каких практических областях применяются методы  ""Теория чисел""?","SELECT DISTINCT ?factor WHERE { 
+?pub rdf:type :Публикация ;  
+  :классифицируется ?f1 . 
+?f1 rdf:type :СфераПрименения .
+?f1 :название ?fname1 .  
+FILTER(lcase(str(?fname1)) =  ""Теория чисел"") }
+}"
+771,"Какие термины используются в публикациях по  ""Автомобильный транспорт""?","SELECT DISTINCT ?term WHERE { 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 ;
+  :использует ?term . 
+?term rdf:type :Термин .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Автомобильный транспорт"")
+}"
+781,"Какие публикации классифицируются тематикой  ""Автоматизация проектирования""?","SELECT DISTINCT ?pub WHERE { 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Автоматизация проектирования"")
+}"
+791,"Какие результаты соответствуют направлению  ""Анализ систем управления""?","SELECT DISTINCT ?res WHERE { 
+?res rdf:type :Результат ;  :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Анализ систем управления"")
+}"
+801,"Какими научными направлениями классифицируются публикации автора  ""Бирин Дмитрий Александрович""?","SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub .
+  ?author :фамилия ?last_name .
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Бирин Дмитрий Александрович"")
+ 
+  ?pub rdf:type :Публикация ; :классифицируется ?factor . 
+  ?factor rdf:type :ФакторКлассификации }"
+811,"Какими научными направлениями классифицируются публикации в журнале  ""Artificial Intelligence in Society""?","SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора ?journal  ; :имеетРоль :организатор ; :порождает ?issue . 
+  ?journal a :Журнал ; rdfs:label ?journal_name .
+  FILTER(lcase(str(?journal_name)) =  ""Artificial Intelligence in Society"")
+
+?issue rdf:type :ВыпускЖурнала . 
+?pub :являетсяЧастью ?issue ; :rdf:type :Публикация ; :классифицируется ?factor . 
+?factor rdf:type :ФакторКлассификации }"
+821,"Какими научными направлениями классифицируются публикации конференции  ""International Conference on Applications of Mathematics to Nonlinear Sciences (Kathmandu)""?","SELECT DISTINCT ?factor WHERE { 
+  ?action rdf:type :Действие ; 
+    :имеетАктора ?conf ;
+    :имеетРоль :организатор;
+    :порождает ?works . 
+  ?conf :название ?conf_name .
+  FILTER(lcase(str(?conf_name)) =  ""International Conference on Applications of Mathematics to Nonlinear Sciences (Kathmandu)"")
+
+  ?works rdf:type :СборникТрудов . ?pub :являетсяЧастью ?works ; :rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации }"
+831,"Какими научными направлениями классифицируются публикации организации  ""Институт экологии человека ФИЦ УУХ СО РАН (ИЭЧ ФИЦ УУХ СО РАН) ""?","SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""Институт экологии человека ФИЦ УУХ СО РАН (ИЭЧ ФИЦ УУХ СО РАН) "")
+
+  ?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации }"
+841,"Как менялись научные направления, которыми классифицируются публикации автора  ""Девяшин А. О."", за период с  2006 по  2021 год?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Девяшин А. О."")
+
+  ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . 
+  ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2006 && ?year <=  2021) } GROUP BY ?factor ?year ORDER BY ?year"
+851,"Как менялись научные направления, которыми классифицируются публикации в журнале  ""Journal of Marine Science and Engineering"", за период с  2006 по  2013 год?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?journal ; :имеетРоль :организатор ; :порождает ?issue . 
+?issue rdf:type :ВыпускЖурнала . 
+?journal a :Журнал ; rdfs:label ?journal_name .
+FILTER(lcase(str(?journal_name)) =  ""Journal of Marine Science and Engineering"")
+
+?pub :являетсяЧастью ?issue ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2006 && ?year <=  2013) } GROUP BY ?factor ?year ORDER BY ?year"
+861,"Как менялись научные направления, которыми классифицируются публикации конференции  ""IEEE International Siberian Confererence on Control and Communications (SIBCON-2016)"", за период с  2003 по  2024 год?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; 
+    :имеетАктора ?conf ; 
+    :имеетРоль :организатор ; 
+    :порождает ?works . 
+  ?conf :название ?conf_name .
+  FILTER(lcase(str(?conf_name)) =  ""IEEE International Siberian Confererence on Control and Communications (SIBCON-2016)"")
+
+  ?works rdf:type :СборникТрудов . ?pub :являетсяЧастью ?works ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2003 && ?year <=  2024) } GROUP BY ?factor ?year ORDER BY ?year"
+871,"Как менялись научные направления, которыми классифицируются публикации организации  ""Институт философии и права СО РАН (ИФПР СО РАН) "", за период с  2004 по  2025 год?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ;  :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""Институт философии и права СО РАН (ИФПР СО РАН) "")
+
+  ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2004 && ?year <=  2025) } GROUP BY ?factor ?year ORDER BY ?year"
+881,Какие публикации классифицируются более чем  14 научными направлениями?,SELECT ?pub WHERE { ?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации } GROUP BY ?pub HAVING(COUNT(DISTINCT ?factor) >  14)
+891,"Какие публикации, классифицируемые более чем  50 научными направлениями, имеют авторов из разных организаций?",SELECT ?pub WHERE { ?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации . ?action rdf:type :Действие ; :имеетРоль :автор ; :порождает ?pub ; :имеетАктора ?author ; :исполняетсяВОрганизации ?org } GROUP BY ?pub HAVING( COUNT(DISTINCT ?factor) >  50 AND COUNT(DISTINCT ?org) > 1 )
+901,Какие публикации активно цитируются за последние  7 лет?,SELECT ?pub (COUNT(DISTINCT ?citing) AS ?citationCount) WHERE { ?citing rdf:type :Публикация ; :цитирует ?pub; :годИздания year. FILTER(?year > ( 2025- 7))} GROUP BY ?pub ORDER BY DESC(?citationCount)
+911,"Какие публикации, активно цитируемые за последние  10 лет, используют термин  ""декомпозиция ""?","SELECT ?pub (COUNT(DISTINCT ?citing) AS ?citationCount) WHERE { ?pub rdf:type :Публикация ; :использует ?term .
+?term rdf:type :Термин .
+?term :название ?term_name .
+FILTER(lcase(str(?term_name)) =  ""декомпозиция "")
+
+?citing rdf:type :Публикация ; :цитирует ?pub ; :годИздания year . 
+FILTER(?year > ( 2025- 10))
+} 
+GROUP BY ?pub ORDER BY DESC(?citationCount)"
+921,"В каких географических регионах сосредоточены организации, выпускающие публикации по  ""Механика в мехатронике""?","SELECT DISTINCT ?geo WHERE { ?action rdf:type :Действие ; :имеетАктора ?org ; :имеетРоль :автор  ; :исполняетсяВОрганизации ?org; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Механика в мехатронике"")
+
+?org rdf:type :Организация ; :имеетГеоПоложение ?geo .
+}"
+931,"Какие научные направления  популярны в организации  ""ФГБУ Научно-производственный комплекс Технологический центр МИЭТ"" по количеству связанных с ними публикаций?","SELECT ?factor (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""ФГБУ Научно-производственный комплекс Технологический центр МИЭТ"")
+
+?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ORDER BY DESC(?count)"
+941,"Автором каких публикаций является  ""Губарков С. В. "" в тематике  ""Предварительная обработка изображений""?","SELECT DISTINCT ?pub WHERE {
+?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Губарков С. В. "")
+
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Предварительная обработка изображений"")
+}"
+951,"Какие публикации повлияли на  ""Convex and set-valued analysis""?","SELECT DISTINCT ?pub WHERE { ?pub rdf:type :Публикация ; :влияетНа ?res .
+?res rdf:type :Результат ;
+      :название ?res_name .
+  FILTER(lcase(str(?res_name)) =  ""Convex and set-valued analysis"") }"
+961,"Какие публикации повлияли на  ""Stable Growth Ratio of Stock Prices: evaluation and use"", и как они классифицируются по тематике?","SELECT DISTINCT ?pub ?factor WHERE {  
+?pub rdf:type :Публикация ; 
+  :влияетНа ?res ;
+  :классифицируется ?factor . 
+?factor rdf:type :ФакторКлассификации .
+?res rdf:type :Результат ;
+      :название ?res_name .
+FILTER(lcase(str(?res_name)) =  ""Stable Growth Ratio of Stock Prices: evaluation and use"")
+}"
+971,"Какие публикации, использующие термин  ""мотивация "", повлияли на  ""Методические подходы к оценке качества государственных и муниципальных услуг в сфере молодежной политики""?","SELECT DISTINCT ?pub WHERE { 
+?pub rdf:type :Публикация ; :влияетНа ?res ; :использует ?term .
+?term rdf:type :Термин .
+?term :название ?term_name .
+FILTER(lcase(str(?term_name)) =  ""мотивация "")
+
+?res rdf:type :Результат ;
+      :название ?res_name .
+  FILTER(lcase(str(?res_name)) =  ""Методические подходы к оценке качества государственных и муниципальных услуг в сфере молодежной политики"")
+}"
+981,"Какие термины определяют тему  ""Переработка углеводородов""?","SELECT DISTINCT ?term WHERE { ?term rdf:type :Термин ; :характеризует ?f1 . 
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Переработка углеводородов"")
+}"
+991,"Какие ученые активно занимаются исследованием данного научного направления  ""Добыча полезных ископаемых""?","SELECT ?author (COUNT(DISTINCT ?pub) AS ?count) WHERE { 
+?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Добыча полезных ископаемых"")
+} 
+GROUP BY ?author ORDER BY DESC(?count)"
+1001,"Какие журналы активно занимаются исследованием данного научного направления  ""Встроенный контроль и контролепригодность""?","SELECT ?journal (COUNT(DISTINCT ?pub) AS ?count) WHERE { 
+?action rdf:type :Действие ; :имеетАктора ?journal ; :имеетРоль :организатор ; :порождает ?issue . 
+?issue rdf:type :ВыпускЖурнала . 
+?pub :являетсяЧастью ?issue .
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Встроенный контроль и контролепригодность"") 
+} 
+GROUP BY ?journal ORDER BY DESC(?count)"
+1011,"Какие конференции активно занимаются исследованием данного научного направления  ""Предварительная обработка изображений""?","SELECT ?conference (COUNT(DISTINCT ?pub) AS ?count) WHERE { 
+?action rdf:type :Действие ; :имеетАктора ?conference ; :имеетРоль :организатор ; :порождает ?works . 
+?works rdf:type :СборникТрудов . 
+?pub :являетсяЧастью ?works . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Предварительная обработка изображений"")
+} 
+GROUP BY ?conference ORDER BY DESC(?count)"
+1021,"Какие организации активно занимаются исследованием данного научного направления  ""Теория кооперативных игр""?","SELECT ?org (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Теория кооперативных игр"")
+} GROUP BY ?org ORDER BY DESC(?count)"
+1031,"Какие термины наиболее часто используются в публикациях, созданных  ""Агеев Петр Георгиевич""?","SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+  ?author :фамилия ?last_name .
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Агеев Петр Георгиевич"")
+
+  ?pub rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин . 
+} GROUP BY ?term ORDER BY DESC(?count)"
+1041,"Какие термины наиболее часто используются в публикациях, созданных  ""Биотехнология""?","SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?journal ; :имеетРоль :организатор ; :порождает ?issue . 
+  ?journal a :Журнал ; rdfs:label ?journal_name .
+  FILTER(lcase(str(?journal_name)) =  ""Биотехнология"")
+
+  ?issue rdf:type :ВыпускЖурнала . ?pub :являетсяЧастью ?issue ; rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин 
+} GROUP BY ?term ORDER BY DESC(?count)"
+1051,"Какие термины наиболее часто используются в публикациях, созданных  ""12th International Conference, OPTIMA 2021""?","SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?conf ; :имеетРоль :организатор ; :порождает ?works . 
+?conf :название ?conf_name . 
+FILTER(lcase(str(?conf_name)) =  ""12th International Conference, OPTIMA 2021"")
+
+?works rdf:type :СборникТрудов . ?pub :являетсяЧастью ?works ; rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин . 
+} GROUP BY ?term ORDER BY DESC(?count)"
+1061,"Какие термины наиболее часто используются в публикациях, созданных  ""Институт химии твердого тела и механохимии СО РАН (ИХТТМ СО РАН) ""?","SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""Институт химии твердого тела и механохимии СО РАН (ИХТТМ СО РАН) "")
+
+  ?pub rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин } GROUP BY ?term ORDER BY DESC(?count)"
+1071,"Какие термины наиболее часто используются в публикациях, классифицированных по  ""Дифференциальная алгебра""?","SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?pub rdf:type :Публикация ; :использует ?term ; :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Дифференциальная алгебра"")
+
+?term rdf:type :Термин } GROUP BY ?term ORDER BY DESC(?count)"
+1081,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые автором  ""Беленький В. М.""?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . 
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Беленький В. М."")
+
+  ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year"
+1091,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые журналом  ""Journal of Imaging""?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?journal ; :имеетРоль :организатор ; :порождает ?issue . 
+  ?journal a :Журнал ; rdfs:label ?journal_name .
+  FILTER(lcase(str(?journal_name)) =  ""Journal of Imaging"")
+
+  ?issue rdf:type :ВыпускЖурнала . ?pub :являетсяЧастью ?issue ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year"
+1101,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые конференцией  ""IEEE The First International Conference on Evolving Internet (INTERNET 2009)""?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?conf ; :имеетРоль :организатор ; :порождает ?works . 
+  ?conf :название ?conf_name .
+  FILTER(lcase(str(?conf_name)) =  ""IEEE The First International Conference on Evolving Internet (INTERNET 2009)"")
+
+  ?works rdf:type :СборникТрудов . 
+?pub :являетсяЧастью ?works ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . 
+?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year"
+1111,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые организацией  ""ФГУП Всероссийский научно-исследовательский институт физико-технических и радиотехнических измерений""?","SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org; :порождает ?pub . 
+  ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""ФГУП Всероссийский научно-исследовательский институт физико-технических и радиотехнических измерений"")
+
+?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . 
+?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year"
+1121,"Какие организации производят наибольшее количество публикаций в научных направлениях  ""Нейронные сети и нейроинформатика""?","SELECT ?org (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?org rdf:type :Организация . 
+?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . 
+?pub rdf:type :Публикация ; 
+  :классифицируется ?f1 .
+
+?f1 a ?mf1 . 
+?mf1 rdfs:subClassOf :ФакторКлассификации ; 
+  :rank ?r1 . 
+?f1 :название ?fname1 .  
+
+FILTER(?r1 < 999)
+FILTER(lcase(str(?fname1)) =  ""Нейронные сети и нейроинформатика"")
+} GROUP BY ?org ORDER BY DESC(?count)"
+1131,"В рамках какой предметной области находятся работы организации  ""Russian Academy of Sciences""?","SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?org :название ?name.
+  FILTER(lcase(str(?name)) =  ""Russian Academy of Sciences"")
+
+?pub rdf:type :Публикация ; :классифицируется ?factor . 
+?factor rdf:type :ПредметнаяОбласть }"
+1141,По какой научной тематике публиковался :person_92?,"SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; 
+:имеетАктора :person_92 ; 
+  :имеетРоль :автор ; 
+  :порождает ?pub . 
+  ?pub rdf:type :Публикация ; :классифицируется ?factor }"
+1151,Какая научная тематика разрабатывается в :nio_5737?,SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора ?person ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_5737 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor }
+1161,Какие организации работают над тематикой :class_factor_6702?,SELECT DISTINCT ?org WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_6702 }
+1171,Какие организации работали над тематикой :class_factor_4611 в промежутке с  2002 года по  2014 год?,SELECT DISTINCT ?org WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_4611 ; :годИздания ?year . FILTER(?year >=  2002 && ?year <=  2014) }
+1181,Какие организации когда-либо работали над тематикой :class_factor_5634?,SELECT DISTINCT ?org WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_5634 }
+1191,Какие авторы публикуются по тематике :class_factor_5817?,SELECT DISTINCT ?author WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_5817 }
+1201,Какие публикации существуют по теме :class_factor_7979?,SELECT DISTINCT ?pub WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_7979 }
+1211,Укажи статьи автора :person_3670 по :class_factor_6228 за период  2000– 2009,SELECT DISTINCT ?pub WHERE { ?action rdf:type :Действие ; :имеетАктора :person_3670 ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Статья ; :классифицируется :class_factor_6228 ; :годИздания ?year . FILTER(?year >=  2000 && ?year <=  2009) }
+1221,Какие работы по тематике :class_factor_3364 были написаны в :nio_5761 в промежутке с  2000 года по  2008 год?,SELECT DISTINCT ?pub WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_5761 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_3364 ; :годИздания ?year . FILTER(?year >=  2000 && ?year <=  2008) }
+1231,Какие есть публикации по теме :class_factor_762 в приложении к сфере :class_factor_3371?,"SELECT DISTINCT ?pub WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_762 , :class_factor_3371  . :class_factor_762 a ?mf1 . ?mf1 rdfs:subClassOf :ФакторКлассификации ; :rank ?r1 . :class_factor_3371 a ?mf2 . ?mf2 rdfs:subClassOf :ФакторКлассификации ; :rank ?r2 . FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999) }"
+1241,Какие авторы пишут по теме :class_factor_7137 в приложении к области :class_factor_5212?,"SELECT DISTINCT ?author WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_7137 , :class_factor_5212  . :class_factor_7137 a ?mf1 . ?mf1 rdfs:subClassOf :ФакторКлассификации ; :rank ?r1 . :class_factor_5212 a ?mf2 . ?mf2 rdfs:subClassOf :ФакторКлассификации ; :rank ?r2 . FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999) }"
+1251,В каких организациях работают над темой :class_factor_5615 в приложении к области :class_factor_2592?,"SELECT DISTINCT ?org WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_5615 , :class_factor_2592 . :class_factor_5615 a ?mf1 . ?mf1 rdfs:subClassOf :ФакторКлассификации ; :rank ?r1 . :class_factor_2592 a ?mf2 . ?mf2 rdfs:subClassOf :ФакторКлассификации ; :rank ?r2 . FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999) }"
+1261,Какие есть публикации по использованию темы :class_factor_5441 в :class_factor_1379?,"SELECT DISTINCT ?pub WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_5441 , :class_factor_1379 . :class_factor_5441 a ?mf1 . ?mf1 rdfs:subClassOf :ФакторКлассификации ; :rank ?r1 . :class_factor_1379 a ?mf2 . ?mf2 rdfs:subClassOf :ФакторКлассификации ; :rank ?r2 . FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999) }"
+1271,Какие авторы пишут об использовании :class_factor_1182 в :class_factor_7354?,"SELECT DISTINCT ?author WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_1182 , :class_factor_7354 . :class_factor_1182 a ?mf1 . ?mf1 rdfs:subClassOf :ФакторКлассификации ; :rank ?r1 . :class_factor_7354 a ?mf2 . ?mf2 rdfs:subClassOf :ФакторКлассификации ; :rank ?r2 . FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999) }"
+1281,В каких организациях работают над использованием :class_factor_7742 в :class_factor_7827?,"SELECT DISTINCT ?org WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_7742 , :class_factor_7827  . :class_factor_7742 a ?mf1 . ?mf1 rdfs:subClassOf :ФакторКлассификации ; :rank ?r1 . :class_factor_7827 a ?mf2 . ?mf2 rdfs:subClassOf :ФакторКлассификации ; :rank ?r2 . FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)}"
+1291,Когда в :nio_61 работали над тематикой :class_factor_8939?,SELECT DISTINCT ?year WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_61 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_8939 ; :годИздания ?year }
+1301,Когда в :nio_4875 работали над использованием :class_factor_209 в :class_factor_6799?,"SELECT DISTINCT ?year WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_4875 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_209 , :class_factor_6799 ; :годИздания ?year . :class_factor_209 a ?mf1 . ?mf1 rdfs:subClassOf :ФакторКлассификации ; :rank ?r1 . :class_factor_6799 a ?mf2 . ?mf2 rdfs:subClassOf :ФакторКлассификации ; :rank ?r2 . FILTER(?r1 < ?r2 && ?r1 < 999 && ?r2 < 999)}"
+1311,Какая тематика была популярна в :nio_5465 в  2005– 2019 годы?,SELECT ?factor (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :имеетАктора ?actor ; :исполняетсяВОрганизации :nio_5465 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . FILTER(?year >=  2005 && ?year <=  2019) } GROUP BY ?factor ORDER BY DESC(?count)
+1321,Какой математический аппарат применяется в :class_factor_2718?,"SELECT DISTINCT ?factor WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_2718 , ?factor . ?factor rdf:type :МатематическийАппарат }"
+1331,Какой математический аппарат применялся в :class_factor_9730 в  2012– 2018 годы?,"SELECT DISTINCT ?factor WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_9730 , ?factor ; :годИздания ?year . ?factor rdf:type :МатематическийАппарат . FILTER(?year >=  2012 && ?year <=  2018) }"
+1341,В каких практических областях применяются методы :class_factor_5776?,"SELECT DISTINCT ?factor WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_5776 , ?factor . ?factor rdf:type :СфераПрименения }"
+1351,Какие термины используются в публикациях по :class_factor_7464?,SELECT DISTINCT ?term WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_7464 ; :использует ?term . ?term rdf:type :Термин }
+1361,Какие публикации классифицируются тематикой :class_factor_2070?,SELECT DISTINCT ?pub WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_2070 }
+1371,Какие результаты соответствуют направлению :class_factor_7442?,SELECT DISTINCT ?res WHERE { ?res rdf:type :Результат ; :классифицируется :class_factor_7442 }
+1381,Какими научными направлениями классифицируются публикации автора :person_237?,SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора :person_237 ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации }
+1391,Какими научными направлениями классифицируются публикации в журнале :journal_2880?,SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора :journal_2880 ; :имеетРоль :организатор ; :порождает ?issue . ?issue rdf:type :ВыпускЖурнала . ?pub :являетсяЧастью ?issue ; :rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации }
+1401,Какими научными направлениями классифицируются публикации конференции :conference_2330?,"SELECT DISTINCT ?factor WHERE { 
+?action rdf:type :Действие ; 
+    :имеетАктора :conference_2330 ; 
+    :имеетРоль :организатор ; 
+    :порождает ?works . 
+?works rdf:type :СборникТрудов . 
+?pub :являетсяЧастью ?works ; 
+    :rdf:type :Публикация ; 
+    :классифицируется ?factor . 
+?factor rdf:type :ФакторКлассификации }"
+1411,Какими научными направлениями классифицируются публикации организации :nio_4858?,SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_4858 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации }
+1421,"Как менялись научные направления, которыми классифицируются публикации автора :person_4424, за период с  2002 по  2012 год?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :person_4424 ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2002 && ?year <=  2012) } GROUP BY ?factor ?year ORDER BY ?year
+1431,"Как менялись научные направления, которыми классифицируются публикации в журнале :journal_7922, за период с  2012 по  2016 год?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :journal_7922 ; :имеетРоль :организатор ; :порождает ?issue . ?issue rdf:type :ВыпускЖурнала . ?pub :являетсяЧастью ?issue ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2012 && ?year <=  2016) } GROUP BY ?factor ?year ORDER BY ?year
+1441,"Как менялись научные направления, которыми классифицируются публикации конференции :conference_3922, за период с  2012 по  2023 год?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :conference_3922 ; :имеетРоль :организатор ; :порождает ?works . ?works rdf:type :СборникТрудов . ?pub :являетсяЧастью ?works ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2012 && ?year <=  2023) } GROUP BY ?factor ?year ORDER BY ?year
+1451,"Как менялись научные направления, которыми классифицируются публикации организации :nio_6139, за период с  2007 по  2024 год?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ;  :имеетРоль :автор ; :исполняетсяВОрганизации :nio_6139 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации FILTER(?year >=  2007 && ?year <=  2024) } GROUP BY ?factor ?year ORDER BY ?year
+1461,"Какие публикации, активно цитируемые за последние  33 лет, используют термин :term_4412?",SELECT ?pub (COUNT(DISTINCT ?citing) AS ?citationCount) WHERE { ?pub rdf:type :Публикация ; :использует :term_4412 . ?citing rdf:type :Публикация ; :цитирует ?pub ; :годИздания year. FILTER(?year > ( 2025- 33))} GROUP BY ?pub ORDER BY DESC(?citationCount)
+1471,"В каких географических регионах сосредоточены организации, выпускающие публикации по :class_factor_8579?",SELECT DISTINCT ?geo WHERE { ?action rdf:type :Действие ; :имеетАктора ?org ; :имеетРоль :автор  ; :исполняетсяВОрганизации ?org; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_8579 . ?org rdf:type :Организация ; :имеетГеоПоложение ?geo }
+1481,Какие научные направления  популярны в организации :nio_9113 по количеству связанных с ними публикаций?,SELECT ?factor (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_9113 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ORDER BY DESC(?count)
+1491,Автором каких публикаций является :person_9402 в тематике :class_factor_6301?,SELECT DISTINCT ?pub WHERE { ?action rdf:type :Действие ; :имеетАктора :person_9402 ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_6301 }
+1501,Какие публикации повлияли на :publ_2942?,SELECT DISTINCT ?pub WHERE { ?pub rdf:type :Результат ; :влияетНа :publ_2942 }
+1511,"Какие публикации повлияли на :publ_2766, и как они классифицируются по тематике?",SELECT DISTINCT ?pub ?factor WHERE { ?pub rdf:type :Результат ; :влияетНа :publ_2766 ; :классифицируется ?factor . ?factor rdf:type :ФакторКлассификации }
+1521,"Какие публикации, использующие термин :term_2563, повлияли на :publ_2906?",SELECT DISTINCT ?pub WHERE { ?pub rdf:type :Публикация ; :влияетНа :publ_2906 ; :использует :term_2563 }
+1531,Какие термины определяют тему :class_factor_4309?,SELECT DISTINCT ?term WHERE { ?term rdf:type :Термин ; :характеризует :class_factor_4309 }
+1541,Какие ученые активно занимаются исследованием данного научного направления :class_factor_225?,SELECT ?author (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?author ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_225 } GROUP BY ?author ORDER BY DESC(?count)
+1551,Какие журналы активно занимаются исследованием данного научного направления :class_factor_440?,SELECT ?journal (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?journal ; :имеетРоль :организатор ; :порождает ?issue . ?issue rdf:type :ВыпускЖурнала . ?pub :являетсяЧастью ?issue ; rdf:type :Публикация ; :классифицируется :class_factor_440 } GROUP BY ?journal ORDER BY DESC(?count)
+1561,Какие конференции активно занимаются исследованием данного научного направления :class_factor_3813?,SELECT ?conference (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора ?conference ; :имеетРоль :организатор ; :порождает ?works . ?works rdf:type :СборникТрудов . ?pub :являетсяЧастью ?works ; rdf:type :Публикация ; :классифицируется :class_factor_3813 } GROUP BY ?conference ORDER BY DESC(?count)
+1571,Какие организации активно занимаются исследованием данного научного направления :class_factor_3367?,SELECT ?org (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_3367 } GROUP BY ?org ORDER BY DESC(?count)
+1581,"Какие термины наиболее часто используются в публикациях, созданных :person_3321?",SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :person_3321 ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин } GROUP BY ?term ORDER BY DESC(?count)
+1591,"Какие термины наиболее часто используются в публикациях, созданных :journal_9059?",SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :journal_9059 ; :имеетРоль :организатор ; :порождает ?issue . ?issue rdf:type :ВыпускЖурнала . ?pub :являетсяЧастью ?issue ; rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин } GROUP BY ?term ORDER BY DESC(?count)
+1601,"Какие термины наиболее часто используются в публикациях, созданных :conference_2405?",SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :conference_2405 ; :имеетРоль :организатор ; :порождает ?works . ?works rdf:type :СборникТрудов . ?pub :являетсяЧастью ?works ; rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин } GROUP BY ?term ORDER BY DESC(?count)
+1611,"Какие термины наиболее часто используются в публикациях, созданных :nio_10?",SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_10; :порождает ?pub . ?pub rdf:type :Публикация ; :использует ?term . ?term rdf:type :Термин } GROUP BY ?term ORDER BY DESC(?count)
+1621,"Какие термины наиболее часто используются в публикациях, классифицированных по :class_factor_908?",SELECT ?term (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?pub rdf:type :Публикация ; :классифицируется :class_factor_908 ; :использует ?term . ?term rdf:type :Термин } GROUP BY ?term ORDER BY DESC(?count)
+1631,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые автором :person_4983?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :person_4983 ; :имеетРоль :автор ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year
+1641,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые журналом :journal_6234?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :journal_6234 ; :имеетРоль :организатор ; :порождает ?issue . ?issue rdf:type :ВыпускЖурнала . ?pub :являетсяЧастью ?issue ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year
+1651,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые конференцией :conference_2116?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетАктора :conference_2116 ; :имеетРоль :организатор ; :порождает ?works . ?works rdf:type :СборникТрудов . ?pub :являетсяЧастью ?works ; rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year
+1661,"Как изменяется во времени перечень научных направлений, по которым классифицируются публикации, порождаемые организацией :nio_6440?",SELECT ?factor ?year (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_6440; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor ; :годИздания ?year . ?factor rdf:type :ФакторКлассификации } GROUP BY ?factor ?year ORDER BY ?year
+1671,Какие организации производят наибольшее количество публикаций в научных направлениях :class_factor_1992?,SELECT ?org (COUNT(DISTINCT ?pub) AS ?count) WHERE { ?org rdf:type :Организация . ?action rdf:type :Действие ; :имеетРоль :автор ; :исполняетсяВОрганизации ?org ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется :class_factor_1992 } GROUP BY ?org ORDER BY DESC(?count)
+1681,В рамках какой предметной области находятся работы организации :nio_2788?,SELECT DISTINCT ?factor WHERE { ?action rdf:type :Действие ; :имеетАктора ?actor ; :имеетРоль :автор ; :исполняетсяВОрганизации :nio_2788 ; :порождает ?pub . ?pub rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ПредметнаяОбласть }
+1691,Какой предметной области принадлежит публикация :publ_2127?,SELECT DISTINCT ?factor WHERE { :publ_2127 rdf:type :Публикация ; :классифицируется ?factor . ?factor rdf:type :ПредметнаяОбласть }
+1701,"С представителями каких организаций пишут совместные статьи авторы из организации  ""АО Высокотехнологический научно-исследовательский институт неорганических материалов имени академика А.А. Бочвара""?","SELECT DISTINCT ?otherOrg
+WHERE {
+  ?act1 rdf:type :Действие ;
+        :имеетАктора ?author ;
+        :имеетРоль :автор ;
+        :исполняетсяВОрганизации ?org ;
+        :порождает ?pub .
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""АО Высокотехнологический научно-исследовательский институт неорганических материалов имени академика А.А. Бочвара"")
+  ?pub rdf:type :Статья  .   
+  ?act2 rdf:type :Действие ;
+        :имеетАктора ?coauthor ; :порождает ?pub ;
+        :исполняетсяВОрганизации ?otherOrg
+  FILTER(?coauthor != ?author)
+}"
+1711,"С представителями каких организаций писали совместные статьи авторы из  ""ФГБУ Научно-производственный комплекс Технологический центр МИЭТ"" с  2007 года по  2013 год?","SELECT DISTINCT ?otherOrg 
+WHERE {
+  ?act1 rdf:type :Действие ;
+        :имеетАктора ?author ;
+        :имеетРоль :автор ;
+        :исполняетсяВОрганизации  ?org ;
+        :порождает ?pub .
+  ?pub rdf:type :Статья ;
+       :годИздания ?year .
+  FILTER(?coauthor != ?author && ?year >=  2007 && ?year <=  2013)
+  ?act2 rdf:type :Действие ;
+        :имеетАктора ?coauthor ; 
+        :порождает ?pub  ;
+        :исполняетсяВОрганизации ?otherOrg .
+        
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""ФГБУ Научно-производственный комплекс Технологический центр МИЭТ"")
+}"
+1721,"Какие научные коллективы входят в состав  ""Восточно-Сибирский институт медико-экологических исследований (ВСИМЭИ) ""?","SELECT ?collective 
+WHERE {
+  ?collective rdf:type :НаучныйКоллектив ;
+              :являетсяЧастью ?org .
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""Восточно-Сибирский институт медико-экологических исследований (ВСИМЭИ) "")
+}"
+1731,"Какие подразделения организации  ""АО Обнинское научно-производственное предприятие Технология им. А.Г. Ромашина"" имеют наибольшее количество публикаций за указанный период с  2001 года по  2023 год?","SELECT ?subdivision (COUNT(DISTINCT ?pub) AS ?count)
+WHERE {
+  ?subdivision rdf:type :Подразделение ;
+               :являетсяЧастью ?org .
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""АО Обнинское научно-производственное предприятие Технология им. А.Г. Ромашина"")
+
+  ?action rdf:type :Действие ;
+          :имеетАктора ?actor ;
+          :имеетРоль :автор ;
+          :исполняетсяВОрганизации ?  subdivision ;
+          :порождает ?pub .
+  ?pub rdf:type :Публикация ;
+       :годИздания ?year .
+  FILTER(?year >=  2001 && ?year <=  2023)
+}
+GROUP BY ?subdivision
+ORDER BY DESC(?count)"
+1741,"Какие подразделения являются частью  ""Институт проблем нефти и газа СО РАН – обособленное подразделение ФИЦ ЯНЦ СО РАН (ИПНГ СО РАН) ""?","SELECT ?subdivision
+WHERE {
+  ?subdivision rdf:type :Подразделение ;
+               :являетсяЧастью ?org .
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""Институт проблем нефти и газа СО РАН – обособленное подразделение ФИЦ ЯНЦ СО РАН (ИПНГ СО РАН) "")
+}"
+1751,"Сколько сотрудников в организации  ""Институт водных и экологических проблем СО РАН (ИВЭП СО РАН) "" имеют ненулевое число публикаций?","SELECT (COUNT(DISTINCT ?person) AS ?count)
+WHERE {
+  ?person rdf:type :Персона .
+  ?action rdf:type :Действие ;
+          :имеетАктора ?person ;
+          :имеетРоль :автор ;
+          :исполняетсяВОрганизации ?org ;
+          :порождает ?pub .
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""Институт водных и экологических проблем СО РАН (ИВЭП СО РАН) "")
+  ?pub rdf:type :Публикация
+}"
+1761,"Выведи список сотрудников организации  ""Институт геохимии им. А.П. Виноградова СО РАН (ИГХ СО РАН) "", отсортируй по числу публикаций, покажи  45 первых.","SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+WHERE {
+  ?person rdf:type :Персона .
+  ?action rdf:type :Действие ;
+          :имеетАктора ?person ;
+          :имеетРоль :автор ;
+          :исполняетсяВОрганизации ?org ;
+          :порождает ?pub .
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""Институт геохимии им. А.П. Виноградова СО РАН (ИГХ СО РАН) "")
+  ?pub rdf:type :Публикация
+}
+GROUP BY ?person
+ORDER BY DESC(?pubcount)
+LIMIT  45"
+1771,"Сколько сотрудников в организации  ""Институт физики полупроводников им. А.В. Ржанова СО РАН (ИФП СО РАН) "" с числом публикаций более  39?","SELECT (COUNT(?person) AS ?count)
+WHERE {
+  SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+  WHERE {
+    ?person rdf:type :Персона .
+    ?action rdf:type :Действие ;
+            :имеетАктора ?person ;
+            :имеетРоль :автор ;
+            :исполняетсяВОрганизации ?org ;
+            :порождает ?pub .
+    ?org :название ?name .  
+    FILTER(lcase(str(?name)) =  ""Институт физики полупроводников им. А.В. Ржанова СО РАН (ИФП СО РАН) "")
+    ?pub rdf:type :Публикация
+  }
+  GROUP BY ?person
+  HAVING(?pubcount >  39)
+}"
+1781,"Покажи список сотрудников из организации  ""Институт молекулярной и клеточной биологии СО РАН (ИМКБ СО РАН) "" с числом публикаций более  3.","SELECT ?person ?pubcount
+WHERE {
+  SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+  WHERE {
+    ?person rdf:type :Персона .
+    ?action rdf:type :Действие ;
+            :имеетАктора ?person ;
+            :имеетРоль :автор ;
+            :исполняетсяВОрганизации ?org ;
+            :порождает ?pub .
+    ?org :название ?name .  
+    FILTER(lcase(str(?name)) =  ""Институт молекулярной и клеточной биологии СО РАН (ИМКБ СО РАН) "")
+    ?pub rdf:type :Публикация
+  }
+  GROUP BY ?person
+  HAVING(?pubcount >  3)
+}
+ORDER BY DESC(?pubcount)"
+1791,"Выведи список сотрудников организации  ""Институт солнечно-земной физики СО РАН (ИСЗФ СО РАН) "", у которых есть совместные публикации с сотрудниками других организаций.","SELECT DISTINCT ?person
+WHERE {
+  ?action1 rdf:type :Действие ;
+           :имеетАктора ?person ;
+           :имеетРоль :автор ;
+           :исполняетсяВОрганизации ?org ;
+           :порождает ?pub .
+  ?org :название ?name .  
+  FILTER(lcase(str(?name)) =  ""Институт солнечно-земной физики СО РАН (ИСЗФ СО РАН) "")
+  ?pub rdf:type :Публикация  .
+  FILTER(?coauthor != ?person)
+  ?action2 rdf:type :Действие ;
+           :имеетАктора ?coauthor ;
+           :исполняетсяВОрганизации ?otherOrg  ; :порождает ?pub .
+  FILTER(?otherOrg !=  ""Институт солнечно-земной физики СО РАН (ИСЗФ СО РАН) "")
+}"
+1801,"Выведи список сотрудников  ""AIRI"", имеющих совместные публикации с сотрудниками  ""Институт проблем химико-энергетических технологий СО РАН (ИПХЭТ СО РАН) "", отсортируй по количеству публикаций.","SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+WHERE {
+  ?action1 rdf:type :Действие ;
+           :имеетАктора ?person ;
+           :имеетРоль :автор ;
+           :исполняетсяВОрганизации ?org1 ;
+           :порождает ?pub .
+  ?org1 :название ?name1 .  
+  FILTER(lcase(str(?name1)) =  ""AIRI"")
+  ?action2 rdf:type :Действие ;
+           :имеетАктора ?coauthor ;
+           :исполняетсяВОрганизации ?org2 ;
+     :порождает ?pub .
+  ?org2 :название ?name2 .  
+  FILTER(lcase(str(?name2)) =  ""Институт проблем химико-энергетических технологий СО РАН (ИПХЭТ СО РАН) "")
+  FILTER(?coauthor != ?person)
+}
+GROUP BY ?person
+ORDER BY DESC(?pubcount)"
+1811,С представителями каких организаций пишут совместные статьи авторы из организации :nio_1214?,"SELECT DISTINCT ?otherOrg
+WHERE {
+  ?act1 rdf:type :Действие ;
+        :имеетАктора ?author ;
+        :имеетРоль :автор ;
+        :исполняетсяВОрганизации :nio_1214 ;
+        :порождает ?pub .
+  ?pub rdf:type :Статья  .   
+  ?act2 rdf:type :Действие ;
+        :имеетАктора ?coauthor ; :порождает ?pub ;
+        :исполняетсяВОрганизации ?otherOrg
+  FILTER(?coauthor != ?author)
+}"
+1821,С представителями каких организаций писали совместные статьи авторы из :nio_7612 с  2004 года по  2015 год?,"SELECT DISTINCT ?otherOrg
+WHERE {
+  ?act1 rdf:type :Действие ;
+        :имеетАктора ?author ;
+        :имеетРоль :автор ;
+        :исполняетсяВОрганизации :nio_7612 ;
+        :порождает ?pub .
+  ?pub rdf:type :Статья ;
+       :годИздания ?year .
+  FILTER(?coauthor != ?author && ?year >=  2004 && ?year <=  2015)
+  ?act2 rdf:type :Действие ;
+        :имеетАктора ?coauthor ; 
+        :порождает ?pub  ;
+        :исполняетсяВОрганизации ?otherOrg
+}"
+1831,Какие научные коллективы входят в состав :nio_6156?,"SELECT ?collective 
+WHERE {
+  ?collective rdf:type :НаучныйКоллектив ;
+              :являетсяЧастью :nio_6156
+}"
+1841,Какие подразделения организации :nio_8422 имеют наибольшее количество публикаций за указанный период с  2003 года по  2025 год?,"SELECT ?subdivision (COUNT(DISTINCT ?pub) AS ?count)
+WHERE {
+  ?subdivision rdf:type :Подразделение ;
+               :являетсяЧастью :nio_8422 .
+  ?action rdf:type :Действие ;
+          :имеетАктора ?actor ;
+          :имеетРоль :автор ;
+          :исполняетсяВОрганизации ?subdivision ;
+          :порождает ?pub .
+  ?pub rdf:type :Публикация ;
+       :годИздания ?year .
+  FILTER(?year >=  2003 && ?year <=  2025)
+}
+GROUP BY ?subdivision
+ORDER BY DESC(?count)"
+1851,Какие подразделения являются частью :nio_1010?,"SELECT ?subdivision
+WHERE {
+  ?subdivision rdf:type :Подразделение ;
+               :являетсяЧастью :nio_1010
+}"
+1861,Сколько сотрудников в организации :nio_4324 имеют ненулевое число публикаций?,"SELECT (COUNT(DISTINCT ?person) AS ?count)
+WHERE {
+  ?person rdf:type :Персона .
+  ?action rdf:type :Действие ;
+          :имеетАктора ?person ;
+          :имеетРоль :автор ;
+          :исполняетсяВОрганизации :nio_4324 ;
+          :порождает ?pub .
+  ?pub rdf:type :Публикация
+}"
+1871,"Выведи список сотрудников организации :nio_4759, отсортируй по числу публикаций, покажи  35 первых.","SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+WHERE {
+  ?person rdf:type :Персона .
+  ?action rdf:type :Действие ;
+          :имеетАктора ?person ;
+          :имеетРоль :автор ;
+          :исполняетсяВОрганизации :nio_4759 ;
+          :порождает ?pub .
+  ?pub rdf:type :Публикация
+}
+GROUP BY ?person
+ORDER BY DESC(?pubcount)
+LIMIT  35"
+1881,Сколько сотрудников в организации :nio_6648 с числом публикаций более  17?,"SELECT (COUNT(?person) AS ?count)
+WHERE {
+  SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+  WHERE {
+    ?person rdf:type :Персона .
+    ?action rdf:type :Действие ;
+            :имеетАктора ?person ;
+            :имеетРоль :автор ;
+            :исполняетсяВОрганизации :nio_6648 ;
+            :порождает ?pub .
+    ?pub rdf:type :Публикация
+  }
+  GROUP BY ?person
+  HAVING(?pubcount >  17)
+}"
+1891,Покажи список сотрудников из организации :nio_2263 с числом публикаций более  47.,"SELECT ?person ?pubcount
+WHERE {
+  SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+  WHERE {
+    ?person rdf:type :Персона .
+    ?action rdf:type :Действие ;
+            :имеетАктора ?person ;
+            :имеетРоль :автор ;
+            :исполняетсяВОрганизации :nio_2263 ;
+            :порождает ?pub .
+    ?pub rdf:type :Публикация
+  }
+  GROUP BY ?person
+  HAVING(?pubcount >  47)
+}
+ORDER BY DESC(?pubcount)"
+1901,"Выведи список сотрудников организации :nio_3139, у которых есть совместные публикации с сотрудниками других организаций.","SELECT DISTINCT ?person
+WHERE {
+  ?action1 rdf:type :Действие ;
+           :имеетАктора ?person ;
+           :имеетРоль :автор ;
+           :исполняетсяВОрганизации :nio_3139 ;
+           :порождает ?pub .
+  ?pub rdf:type :Публикация  .
+  FILTER(?coauthor != ?person)
+  ?action2 rdf:type :Действие ;
+           :имеетАктора ?coauthor ;
+           :исполняетсяВОрганизации ?otherOrg  ; :порождает ?pub .
+  FILTER(?otherOrg != :nio_3139)
+}"
+1911,"Выведи список сотрудников :nio_4860, имеющих совместные публикации с сотрудниками :nio_4040, отсортируй по количеству публикаций.","SELECT ?person (COUNT(DISTINCT ?pub) AS ?pubcount)
+WHERE {
+  ?action1 rdf:type :Действие ;
+           :имеетАктора ?person ;
+           :имеетРоль :автор ;
+           :исполняетсяВОрганизации :nio_4860 ;
+           :порождает ?pub .
+  ?action2 rdf:type :Действие ;
+           :имеетАктора ?coauthor ;
+           :исполняетсяВОрганизации :nio_4040 ;
+     :порождает ?pub .
+  FILTER(?coauthor != ?person)
+}
+GROUP BY ?person
+ORDER BY DESC(?pubcount)"
+1921,"Покажи публикации, содержащие в ключевых словах  ""цикл "".","SELECT DISTINCT ?pub
+WHERE {
+  ?pub rdf:type :Публикация ;
+       :ключевоеСлово  ""цикл ""
+}"
+1931,"Покажи публикации, которые ссылаются на публикацию  ""Дополнительные задачи по линейной алгебре"".","SELECT DISTINCT ?pub
+WHERE {
+  ?pub rdf:type :Публикация ;
+      :цитирует ?pub2.
+  ?pub2 rdf:type :Публикация ;
+      :название ?pub2_name .
+  FILTER(lcase(str(?pub2_name)) =  ""Дополнительные задачи по линейной алгебре"")
+}"
+1941,"Сколько публикаций у автора  ""Ryzhkov Alexander ."" с ключевыми словами  ""Peer-to-peer traﬃc characterization""?","SELECT (COUNT(DISTINCT ?pub) AS ?count)
+WHERE {
+  ?pub rdf:type :Публикация ;
+       :имеетАвтора ?author ;
+       :ключевоеСлово  ""Peer-to-peer traﬃc characterization"" ;
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep)
+  FILTER(lcase(str(?author_fio_sep)) =  ""Ryzhkov Alexander ."") }"
+1951,"Покажи все термины, начинающиеся с текста  ""Предложенная система должна"".","SELECT DISTINCT ?term
+WHERE {
+  ?term rdf:type :Термин ;
+        :название ?lbl .
+  FILTER(STRSTARTS(LCASE(?lbl), LCASE( ""Предложенная система должна"")))
+}"
+1961,"Покажи мне все термины, содержащие текст  ""Беспилотный транспорт представляет"".","SELECT DISTINCT ?term
+WHERE {
+  ?term rdf:type :Термин ;
+        :название ?lbl .
+  FILTER(CONTAINS(LCASE(?lbl), LCASE( ""Беспилотный транспорт представляет"")))
+}"
+1971,"Какие публикации используют термин  ""элемент ""?","SELECT DISTINCT ?pub
+WHERE {
+  ?pub rdf:type :Публикация ;
+       :использует  ""элемент ""
+}"
+1981,"Покажи публикации, которые ссылаются на публикацию :publ_1998.","SELECT DISTINCT ?pub
+WHERE {
+  ?pub rdf:type :Публикация ;
+       :цитирует :publ_1998
+}"
+1991,"Сколько публикаций у автора :person_3341 с ключевыми словами  ""Network evolution ""?","SELECT (COUNT(DISTINCT ?pub) AS ?count)
+WHERE {
+  ?pub rdf:type :Публикация ;
+       :имеетАвтора :person_3341 ;
+       :ключевоеСлово  ""Network evolution ""
+}"
+2001,"Какие статьи вошли в выпуск журнала  ""Контуры глобальных трансформаций: политика""?","SELECT DISTINCT ?article
+WHERE {
+  ?article rdf:type :Статья ;
+           :являетсяЧастью ?journal .
+  ?journal a :ВыпускЖурнала .
+  ?journal rdfs:label ?journal_name ;
+  FILTER(lcase(str(?journal_name)) =  ""Контуры глобальных трансформаций: политика"")
+}"
+2011,"Какие сборники трудов или книги изданы  ""Ас Гард"", где роль  ""Greenwood D - "" – редактор?","SELECT DISTINCT ?pub
+WHERE {
+  ?pub rdf:type ?t .
+  FILTER(?t IN (:СборникТрудов, :Книга))
+  ?pub :имеетИздательство ?publisher .
+  ?publisher a :Издательство;
+  rdfs:label ?publisher_name;
+  FILTER(lcase(str(?publisher_name)) =  ""Ас Гард"")
+
+  ?action rdf:type :Действие ;
+          :имеетАктора?author ;
+          :имеетРоль :редактор ;
+          :порождает ?pub .
+  ?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Greenwood D - "")
+}"
+2021,Какие публикации были изданы в году  2008?,"SELECT DISTINCT ?pub
+WHERE {
+  ?pub rdf:type :Публикация ;
+       :годИздания ?year .
+  FILTER(?year =  2008)
+}"
+2031,"Какие действия выполнял ученый  ""Yanishevskaya N A "" в период с  2003 по  2024 год?","SELECT DISTINCT ?action
+WHERE {
+  ?action rdf:type :Действие ;
+          :имеетАктора ?author ;
+          :годНачала ?start ;
+          :годЗавершения ?end .
+  FILTER(?start >=  2003 && ?end <=  2024)
+
+?author :фамилия ?last_name.
+            OPTIONAL {?author :имя ?first_name. }
+            OPTIONAL {?author :отчество ?sec_name. }
+  BIND(CONCAT( ?last_name, "" "", COALESCE(?first_name,""""), "" "", COALESCE(?sec_name,"""") ) as ?author_fio_sep) 
+  FILTER(lcase(str(?author_fio_sep)) =  ""Yanishevskaya N A "")
+}"
+2041,Какие проекты осуществлялись c  2010 по  2014 и какие результаты они породили?,"SELECT DISTINCT ?proj ?res
+WHERE {
+  ?proj rdf:type :Проект ;
+        :годНачала ?start ;
+        :годЗавершения ?end .
+  FILTER(?start >=  2010 && ?end <=  2014)
+  ?action rdf:type :Действие ;
+          :имеетАктора ?proj ;
+          :порождает ?res .
+  ?res rdf:type :Результат
+}
+"
+2051,"Какие сборники трудов или книги изданы :publisher_6856, где роль :person_1566 – редактор?","SELECT DISTINCT ?pub
+WHERE {
+  ?pub rdf:type ?t .
+  FILTER(?t IN (:СборникТрудов, :Книга))
+  ?pub :имеетИздательство :publisher_6856 .
+  ?action rdf:type :Действие ;
+          :имеетАктора :person_1566 ;
+          :имеетРоль :редактор ;
+          :порождает ?pub
+}"
+2061,Какие тематические категории :классификатор_исанд6021 соответствуют тематическим категориям :классификатор_исанд2397?,"SELECT DISTINCT ?cat1 ?cat2
+WHERE {
+  ?cat1 rdf:type :ТематическаяКатегория ;
+        :являетсяКомпонентом :классификатор_исанд6021 ;
+        :соответствует ?cat2 .
+  ?cat2 rdf:type :ТематическаяКатегория ;
+        :являетсяКомпонентом :классификатор_исанд2397
+}"
+2071,Какие действия выполнял ученый :person_6969 в период с  2000 по  2004 год?,"SELECT DISTINCT ?action
+WHERE {
+  ?action rdf:type :Действие ;
+          :имеетАктора :person_6969 ;
+          :годНачала ?start ;
+          :годЗавершения ?end .
+  FILTER(?start >=  2000 && ?end <=  2004)
+}"
