@@ -8,4 +8,4 @@ In this work, we used a framework for integrating large language models with sci
 ![fig](pictures/SPARQL_диаграмма_3_2.png)
 figure 1.
 
-**Papper**: D.A. Gubanov and V.A. Sergeev INTEGRATION OF ONTOLOGIES AND LARGE LANGUAGE MODELS TO ANSWER SCIENTOMETRICS QUESTIONS USING CONTROL THEORY (in progress)
+**Papper**: Губанов Д.А., Сергеев В.А. Интеграция онтологий и больших языковых моделей для ответа на наукометрические вопросы на примере теории управления // Проблемы управления. 2026. № 2. С. 49-57.
